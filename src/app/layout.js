@@ -17,29 +17,29 @@ export const metadata = {
    ============================================ */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
         {/* Bootstrap CSS */}
-        <link rel="stylesheet" href="css/bootstrap.min.css" />
+        <link rel="stylesheet" href="/css/bootstrap.min.css" />
         {/* Fontawesome */}
-        <link rel="stylesheet" href="css/fontawesome.css" />
+        <link rel="stylesheet" href="/css/fontawesome.css" />
         {/* Flaticon */}
-        <link rel="stylesheet" href="css/flaticon.css" />
+        <link rel="stylesheet" href="/css/flaticon.css" />
         {/* Base Icons */}
-        <link rel="stylesheet" href="css/pbminfotech-base-icons.css" />
+        <link rel="stylesheet" href="/css/pbminfotech-base-icons.css" />
         {/* Themify Icons */}
-        <link rel="stylesheet" href="css/themify-icons.css" />
+        <link rel="stylesheet" href="/css/themify-icons.css" />
         {/* Slick */}
-        <link rel="stylesheet" href="css/swiper.min.css" />
+        <link rel="stylesheet" href="/css/swiper.min.css" />
         {/* Magnific */}
-        <link rel="stylesheet" href="css/magnific-popup.css" />
+        <link rel="stylesheet" href="/css/magnific-popup.css" />
         {/* AOS */}
-        <link rel="stylesheet" href="css/aos.css" />
+        <link rel="stylesheet" href="/css/aos.css" />
         {/* Shortcode CSS */}
-        <link rel="stylesheet" href="css/shortcode.css" />
+        <link rel="stylesheet" href="/css/shortcode.css" />
         {/* Base CSS */}
-        <link rel="stylesheet" href="css/base.css" />
+        <link rel="stylesheet" href="/css/base.css" />
         {/* Style CSS */}
-        <link rel="stylesheet" href="css/style.css" />
+        <link rel="stylesheet" href="/css/style.css" />
         {/* Responsive CSS */}
-        <link rel="stylesheet" href="css/responsive.css" />
+        <link rel="stylesheet" href="/css/responsive.css" />
       </head>
       <body className={inter.className}>
         {children}
@@ -56,59 +56,59 @@ export const metadata = {
 
         
 
-        <script src="js/popper.min.js"></script>
+        <script src="/js/popper.min.js"></script>
         {/* Bootstrap JS */}
 
-        <script src="js/bootstrap.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
         {/* jquery Waypoints JS */}
 
-        <script src="js/jquery.waypoints.min.js"></script>
+        <script src="/js/jquery.waypoints.min.js"></script>
         {/* jquery Appear JS */}
 
-        <script src="js/jquery.appear.js"></script>
+        <script src="/js/jquery.appear.js"></script>
         {/* Numinate JS */}
 
-        <script src="js/numinate.min.js"></script>
+        <script src="/js/numinate.min.js"></script>
         {/* Slick JS */}
 
         {/* <script src="js/swiper.min.js"></script> */}
         {/* Magnific JS */}
 
-        <script src="js/jquery.magnific-popup.min.js"></script>
+        <script src="/js/jquery.magnific-popup.min.js"></script>
         {/* Circle Progress JS */}
 
-        <script src="js/circle-progress.js"></script>
+        <script src="/js/circle-progress.js"></script>
         {/* countdown JS */}
 
-        <script src="js/jquery.countdown.min.js"></script>
+        <script src="/js/jquery.countdown.min.js"></script>
         {/* AOS */}
 
-        <script src="js/aos.js"></script>
+        <script src="/js/aos.js"></script>
         {/* GSAP */}
 
-        <script src="js/gsap.js"></script>
+        <script src="/js/gsap.js"></script>
         {/* Scroll Trigger */}
 
-        <script src="js/ScrollTrigger.js"></script>
+        <script src="/js/ScrollTrigger.js"></script>
         {/* Split Text */}
 
-        <script src="js/SplitText.js"></script>
+        <script src="/js/SplitText.js"></script>
         {/* Magnetic */}
 
-        <script src="js/magnetic.js"></script>
+        <script src="/js/magnetic.js"></script>
         {/* Morphext JS */}
 
-        <script src="js/morphext.min.js"></script>
-        <script src="js/popper.min.js"></script>
+        <script src="/js/morphext.min.js"></script>
+        <script src="/js/popper.min.js"></script>
         {/* GSAP Animation */}
 
-        <script src="js/gsap-animation.js"></script>
+        <script src="/js/gsap-animation.js"></script>
         {/* Isotope JS */}
 
-        <script src="js/isotope.pkgd.min.js"></script>
+        <script src="/js/isotope.pkgd.min.js"></script>
         {/* Scripts JS */}
 
-        <script src="js/scripts.js"></script>
+        <script src="/js/scripts.js"></script>
       </body>
     </html>
   );
