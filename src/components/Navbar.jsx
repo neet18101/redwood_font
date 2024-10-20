@@ -1,7 +1,7 @@
 "use client";
 
 import Link from 'next/link';
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 
 
@@ -14,7 +14,7 @@ function Navbar() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch('http://localhost:3000/api/(forntend-api)/get-menu');
+                const res = await fetch('/api/get-menu');
                 const result = await res.json();
                 console.log('result:>', result);
                 setServicesCat(result);
@@ -28,9 +28,6 @@ function Navbar() {
 
         fetchData();
     }, []);
-
-
-
     return (
         <>
             <div className="pbmit-header-overlay">
@@ -121,40 +118,33 @@ function Navbar() {
 
                                                 </li>
                                                 <li className={`dropdown ${pathname === "/service" ? "active" : ""}`}>
-                                                    <Link href="/new">Service</Link>
-
-                                                    {/* <Link href="#">Service</Link> */}
-                                                   
-
-
-                                                    {
-                                                        servicesCat?.length > 0 && (
-                                                            <ul>
-                                                                {servicesCat.map((item) => (
-                                                                    <li key={item.id}>
-                                                                        <Link href={item?.url || '#'}>
-                                                                            {item?.name}
-                                                                        </Link>
-
-                                                                        {item.subMenus && item.subMenus.length > 0 && (
-                                                                            <>
-                                                                                {item.subMenus.map(subItem => (
-                                                                                    <li key={subItem?.id}>
-                                                                                        <Link href={subItem?.url || '#'}>
-                                                                                            {subItem.name}
-                                                                                        </Link>
-                                                                                    </li>
-                                                                                ))}
-                                                                            </>
+                                                    <Link href="#">Service</Link>
+                                                    <ul>
+                                                        {
+                                                            servicesCat?.length > 0 && servicesCat.map((item, index) => {
+                                                                const hasSubMenus = item.subMenus?.length > 0;
+                                                                return (
+                                                                    <li className={hasSubMenus ? "dropdown" : "no_subMenu"} key={index}>
+                                                                        <a href={hasSubMenus ? "/" : `/${item.url}`}>{item.name}</a>
+                                                                        {item?.subMenus?.length > 0 && (
+                                                                            <ul>
+                                                                                {item?.subMenus?.length > 0 && item.subMenus.map((sub_menu, subIndex) => {
+                                                                                    return (
+                                                                                        <li key={subIndex}>
+                                                                                            <a href={`${sub_menu.url}`}>{sub_menu.name}</a>
+                                                                                        </li>
+                                                                                    );
+                                                                                })}
+                                                                            </ul>
                                                                         )}
                                                                     </li>
-                                                                ))}
-                                                            </ul>
-                                                        )
-                                                    }
+                                                                );
+                                                            })
+                                                        }
+                                                    </ul>
                                                 </li>
                                                 <li className={`dropdown ${pathname === "/blog" ? "active" : ""}`}>
-                                                    <a href="#">Blog</a>
+                                                    <a href="/blogs">Blog</a>
                                                     {/* <ul>
                                                         <li>
                                                             <a href="about-us.html">Shop Fronts</a>

@@ -27,9 +27,11 @@ export async function POST(req) {
     const selectedMenu = data.get("selectedMenu");
     const selectedSubMenu = data.get("selectedSubMenu");
     const textAreaValue = data.get("textAreaValue");
+    const title = data.get("title");
     const serviceSlider = JSON.stringify(multipleImagePaths);
     await MenuContent.create({
       menu_id: selectedMenu,
+      title: title,
       sub_menu_id: selectedSubMenu,
       service_wallpaper: singleImagePath,
       content: textAreaValue,

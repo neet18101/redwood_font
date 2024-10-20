@@ -14,6 +14,7 @@ export default function Page() {
   const [selectedMenu, setSelectedMenu] = useState(null);
   const [selectedSubMenu, setSelectedSubMenu] = useState("");
   const [textAreaValue, setTextAreaValue] = useState("");
+  const [title, setTitle] = useState(""); // State for the title input
 
   useEffect(() => {
     const fetchMenuData = async () => {
@@ -58,6 +59,8 @@ export default function Page() {
     formData.append("selectedMenu", selectedMenu);
     formData.append("selectedSubMenu", selectedSubMenu);
     formData.append("textAreaValue", textAreaValue);
+    formData.append("title", title); // Include title in form data
+
     const response = await fetch("/api/upload", {
       method: "POST",
       body: formData,
@@ -70,6 +73,7 @@ export default function Page() {
       setSelectedMenu(null);
       setSelectedSubMenu("");
       setTextAreaValue("");
+      setTitle(""); // Reset title after successful upload
       window.location.reload();
     } else {
       toast.error("Error uploading file");
@@ -126,15 +130,10 @@ export default function Page() {
                               >
                                 <option value="">None</option>
                                 {menuOptions?.filter((menu) => !menu.parent_id)?.map((menu) => (
-                                    <option key={menu.id} value={menu.id}>
-                                      {menu.name}{" "}
-                                      {/* {menu.parent_id
-                                        ? `(Child of ${getParentName(
-                                            menu.parent_id
-                                          )})`
-                                        : "(Parent)"} */}
-                                    </option>
-                                  ))}
+                                  <option key={menu.id} value={menu.id}>
+                                    {menu.name}
+                                  </option>
+                                ))}
                               </select>
                             </div>
                           </div>
@@ -168,6 +167,18 @@ export default function Page() {
 
                         <div className="section-block">
                           <div className="row gy-4 mt-3">
+                            {/* Title Input Field */}
+                            <div className="col-xxl-6 col-md-6">
+                              <label className="form-label">Title</label>
+                              <input
+                                type="text"
+                                className="form-control"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                placeholder="Enter title here"
+                                required // Optional: make it a required field
+                              />
+                            </div>
                             {/* Slider Image Input */}
                             <div className="col-xxl-6 col-md-6">
                               <label className="form-label">Slider Image</label>
