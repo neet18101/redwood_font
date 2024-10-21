@@ -4,8 +4,7 @@ import RootLayout from '../../layout';
 import AdminHeader from '../../components_admin/AdminHeader';
 import Sidebar from '../../components_admin/Sidebar';
 import { Editor } from '@tinymce/tinymce-react';
-
-import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 
 function Page() {
     const [blogCategory, setBlogCategory] = useState([]);
@@ -13,16 +12,10 @@ function Page() {
     const [blogSlug, setBlogSlug] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
     const [blogContent, setBlogContent] = useState('');
+    const [blogImage, setBlogImage] = useState(null); // Add state for blog_image
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
-
-
-    const router = useRouter();
-    const { id } = router.query; // Get the ID from the URL
-    console.log('ss:>', id);
-    console.log('router.query', router.query);
-
 
     // Fetch blog categories from API
     useEffect(() => {
@@ -56,6 +49,12 @@ function Page() {
         setBlogSlug(generateSlug(title));
     };
 
+    // Handle image input change
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        setBlogImage(file); // Set selected image file
+    };
+
     const renderMenuOptions = (items) => {
         return items.map((item) => (
             <option key={item.id} value={item.id}>
@@ -76,31 +75,32 @@ function Page() {
             return;
         }
 
-        const newBlog = {
-            title: blogTitle,
-            slug: blogSlug,
-            categoryId: selectedCategory || null,
-            content: blogContent,
-        };
+        const formData = new FormData();
+        formData.append('title', blogTitle);
+        formData.append('slug', blogSlug);
+        formData.append('categoryId', selectedCategory || null);
+        formData.append('content', blogContent);
+        if (blogImage) {
+            formData.append('blog_image', blogImage); // Append the image file if it exists
+        }
 
         try {
             setLoading(true);
             const response = await fetch('/api/add-blog', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newBlog),
+                body: formData, // Use formData for sending files
             });
 
             if (response.ok) {
-                setSuccessMessage('Blog post added successfully.');
+                toast.success('Blog post added successfully.');
                 setBlogTitle('');
                 setBlogSlug('');
                 setSelectedCategory('');
                 setBlogContent('');
+                setBlogImage(null); // Clear the image input after submission
             } else {
                 const errorData = await response.json();
+                toast.error(errorData.message || 'Failed to add blog post.');
                 setErrorMessage(errorData.message || 'Failed to add blog post.');
             }
         } catch (error) {
@@ -137,8 +137,6 @@ function Page() {
                         {/* end page title */}
                         <div className="row">
                             <div className="col-lg-12">
-                                {errorMessage && <div className="alert alert-danger mt-3">{errorMessage}</div>}
-                                {successMessage && <div className="alert alert-success mt-3">{successMessage}</div>}
                                 <div className="card">
                                     <div className="card-body">
                                         <div className="live-preview">
@@ -175,6 +173,19 @@ function Page() {
                                                             />
                                                         </div>
                                                     </div>
+                                                    {/* Blog Image Input */}
+                                                    <div className="col-xxl-6 col-md-6">
+                                                        <label htmlFor="blogImage" className="form-label">
+                                                            Blog Image
+                                                        </label>
+                                                        <input
+                                                            type="file"
+                                                            className="form-control"
+                                                            id="blogImage"
+                                                            onChange={handleImageChange}
+                                                            accept="image/*" // Optional: accept only image files
+                                                        />
+                                                    </div>
 
                                                     <div className="col-xxl-6 col-md-6">
                                                         <div>
@@ -207,9 +218,9 @@ function Page() {
                                                             onEditorChange={(content) => setBlogContent(content)}
                                                         />
                                                     </div>
+
+
                                                 </div>
-
-
 
                                                 <div className="row gy-4 mt-3">
                                                     <div className="col-xxl-3 col-md-6">
@@ -242,7 +253,7 @@ function Page() {
                     </div>
                 </footer>
             </div>
-        </RootLayout>
+        </RootLayout >
     );
 }
 

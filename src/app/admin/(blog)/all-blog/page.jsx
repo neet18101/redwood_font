@@ -4,76 +4,60 @@ import RootLayout from '../../layout';
 import AdminHeader from '../../components_admin/AdminHeader';
 import Sidebar from '../../components_admin/Sidebar';
 
-
-function page(param) {
+function Page() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
-  console.log('blog id', param);
   // Form Submission Handler
   const deleteHandle = async (blogId) => {
-    console.log('blogId:>', blogId);
     setErrorMessage('');
     setSuccessMessage('');
 
-    // Basic Validation
     if (!blogId) {
-      setErrorMessage('Something went wrong. Please try again leater!');
+      setErrorMessage('Something went wrong. Please try again later!');
       return;
     }
 
-    const apiParam = {
-      id: blogId
-    };
-
     try {
       setLoading(true);
-      const response = await fetch('/api/blogs-api', {
-        method: 'DELETE',
+      const response = await fetch(`/api/delete-blog?id=${blogId}`, {
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(apiParam),
+        body: JSON.stringify({ id: blogId }),
       });
 
       if (response.ok) {
-        const blogIndex = blogs.findIndex(item => item.id === blogId);
-        console.log('blogIndex:>', blogIndex);
-        blogs.splice(blogIndex, 1);
+        // Remove the deleted blog from the UI
+        setBlogs(blogs.filter((blog) => blog.id !== blogId));
         setSuccessMessage('Blog post deleted successfully.');
       } else {
         const errorData = await response.json();
         setErrorMessage(errorData.message || 'Failed to delete blog post.');
       }
     } catch (error) {
-      console.error('Error adding blog:', error);
+      console.error('Error deleting blog:', error);
       setErrorMessage('Something went wrong. Please try again later.');
     } finally {
       setLoading(false);
     }
   };
 
-
-
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`/api/blogs-api`);
+        const res = await fetch(`/api/all-blog`);
         const result = await res.json();
-        console.log('res-:>', result);
         setBlogs(result);
       } catch (error) {
         console.error('Error fetching data:', error);
-      } finally {
-        console.log('inside finally');
       }
     };
     fetchData();
   }, []);
-
 
 
   return (
@@ -101,52 +85,86 @@ function page(param) {
               </div>
             </div>
             {/* end page title */}
-            <div className="row">
-              <div className="col-lg-12">
-                {errorMessage && <div className="alert alert-danger mt-3">{errorMessage}</div>}
-                {successMessage && <div className="alert alert-success mt-3">{successMessage}</div>}
-                {/* <!-- Tables Without Borders --> */}
-                <table class="table table-borderless table-nowrap">
-                  <thead>
-                    <tr>
-                      <th scope="col">Sr No</th>
-                      <th scope="col">Title</th>
-                      <th scope="col">Category</th>
-                      <th scope="col">Content</th>
-                      <th scope="col">Created Date</th>
-                      <th scope="col">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {blogs.map((item, index) => (
-                      <tr>
-                        <th scope="row">{++index}</th>
-                        <td>{item.title}</td>
-                        <td>{item?.category}</td>
-                        <td dangerouslySetInnerHTML={{ __html: item.content }} ></td>
-                        <td>{item.formattedDate}</td>
-                        <td>
-                          <div class="hstack gap-3 fs-15">
-                            <a href={`add-blog/${item.id}`} class="link-success fs-15"><i class="ri-edit-2-line"></i></a>
-                            <a href="javascript:void(0);" class="link-danger" onClick={() => { deleteHandle(item.id) }} ><i class="ri-delete-bin-5-line"></i></a>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
+            {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+            {successMessage && <div className="alert alert-success">{successMessage}</div>}
+            <div className="col-xl-12">
+              <div className="card">
+                <div className="card-body">
+                  <div className="live-preview">
+                    <div className="table-responsive">
+                      <table className="table table-striped table-nowrap align-middle mb-0">
+                        <thead>
+                          <tr>
+                            <th scope="col">S.NO</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Content</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {blogs.length > 0 ? (
+                            blogs.map((blog, index) => (
+                              <tr key={blog.id}>
+                                <td className="fw-medium">{index + 1}</td>
+                                <td>{blog.title}</td>
+                                <td>
+                                  <img
+                                    src={blog.blog_image || '/default_image.jpg'}
+                                    alt={blog.title}
+                                    width="50"
+                                    height="50"
+                                    style={{ borderRadius: '50px' }}
+                                  />
+                                </td>
+                                <td dangerouslySetInnerHTML={{ __html: blog.content.substring(0, 100) + (blog.content.length > 100 ? '...' : '') }}></td>
 
-                  </tbody>
-                </table>
-
-
+                                <td>
+                                  <span className={`badge ${blog.is_active == 1 ? 'bg-success' : 'bg-danger'}`}>
+                                    {blog.is_active == 1 ? 'Active' : 'Inactive'}
+                                  </span>
+                                </td>
+                                <td>
+                                  <div className="hstack gap-3 flex-wrap">
+                                    <a
+                                      href={`/admin/edit-blog/${blog.id}`}
+                                      className="link-success fs-15"
+                                    >
+                                      <i className="ri-edit-2-line"></i>
+                                    </a>
+                                    <a
+                                      href="javascript:void(0);"
+                                      onClick={() => deleteHandle(blog.id)}
+                                      className="link-danger fs-15"
+                                    >
+                                      <i className="ri-delete-bin-line"></i>
+                                    </a>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td colSpan="6" className="text-center">
+                                No blogs available.
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                {/* end card-body */}
               </div>
+              {/* end card */}
             </div>
-
           </div>
         </div>
       </div>
-
     </RootLayout>
-  )
+  );
 }
 
-export default page
+export default Page;

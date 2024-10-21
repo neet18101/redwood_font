@@ -39,7 +39,7 @@ function Navbar() {
                                     <h1 className="site-title">
                                         <Link href="/">
 
-                                            <h6 className='underline'>Red Wood Shop</h6>
+                                          <img className='logo-img' src="/logo.png" alt="" />
                                         </Link>
                                     </h1>
                                     <div className="pbmit-sticky-corner  pbmit-top-right-corner">
