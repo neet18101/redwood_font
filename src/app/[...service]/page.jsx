@@ -45,6 +45,7 @@ function page() {
                 {console.log(sliderArray)}
                 {/* Title Bar */}
                 <div className="pbmit-title-bar-wrapper" style={{ backgroundImage: `url(${catData && catData[0]?.service_wallpaper})` }}>
+
                     <div className="container">
                         <div className="pbmit-title-bar-content">
                             <div className="pbmit-title-bar-content-inner">
@@ -102,12 +103,11 @@ function page() {
                             <article className="portfolio-single">
                                 {Array.isArray(catData) && catData.map((item) => (
                                     <>
-                                        {/* service section  start  */}
-                                        <div className="pbmit-short-description" key={item.id} dangerouslySetInnerHTML={{ __html: item?.content }}>
 
-
+                                        <div className="pbmit-short-description">
+                                            <h3>{item?.title}</h3>
+                                            <div key={item.id} dangerouslySetInnerHTML={{ __html: item?.content }} />
                                         </div>
-
                                         <div className="pbmit-featured-img-wrapper">
                                             <div className="pf-img-box">
                                                 <div className="row">
@@ -127,7 +127,7 @@ function page() {
                                                 </div>
                                             </div>
                                         </div>
-                                        {console.log(item)}
+                                        {console.log('item', item)}
 
 
                                         <div className="pbmit-entry-content">

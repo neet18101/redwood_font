@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 import MenuContent from "../../models/AddContent";
+import toast from "react-hot-toast";
 export async function POST(req) {
   try {
     const data = await req.formData();
@@ -29,6 +30,21 @@ export async function POST(req) {
     const textAreaValue = data.get("textAreaValue");
     const title = data.get("title");
     const serviceSlider = JSON.stringify(multipleImagePaths);
+    const subMenuExists = await MenuContent.findOne({
+      where: {
+        sub_menu_id: selectedSubMenu,
+      },
+    });
+    if (subMenuExists) {
+      toast.error("Sub Menu Already exists!")
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Sub menu already exists",
+        },
+        { status: 400 }
+      );
+    }
     await MenuContent.create({
       menu_id: selectedMenu,
       title: title,

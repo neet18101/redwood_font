@@ -5,6 +5,8 @@ import AdminHeader from '../../components_admin/AdminHeader';
 import Sidebar from '../../components_admin/Sidebar';
 import { Editor } from '@tinymce/tinymce-react';
 
+import { useRouter } from 'next/router';
+
 function Page() {
     const [blogCategory, setBlogCategory] = useState([]);
     const [blogTitle, setBlogTitle] = useState('');
@@ -14,6 +16,13 @@ function Page() {
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+
+
+    const router = useRouter();
+    const { id } = router.query; // Get the ID from the URL
+    console.log('ss:>', id);
+    console.log('router.query', router.query);
+
 
     // Fetch blog categories from API
     useEffect(() => {
@@ -128,8 +137,8 @@ function Page() {
                         {/* end page title */}
                         <div className="row">
                             <div className="col-lg-12">
-                            {errorMessage && <div className="alert alert-danger mt-3">{errorMessage}</div>}
-                            {successMessage && <div className="alert alert-success mt-3">{successMessage}</div>}
+                                {errorMessage && <div className="alert alert-danger mt-3">{errorMessage}</div>}
+                                {successMessage && <div className="alert alert-success mt-3">{successMessage}</div>}
                                 <div className="card">
                                     <div className="card-body">
                                         <div className="live-preview">
@@ -200,7 +209,7 @@ function Page() {
                                                     </div>
                                                 </div>
 
-                                              
+
 
                                                 <div className="row gy-4 mt-3">
                                                     <div className="col-xxl-3 col-md-6">

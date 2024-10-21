@@ -77,7 +77,7 @@ function Sidebar() {
                       </a>
                     </li>
                     <li className="nav-item">
-                      <Link href="/admin/add-menu" className="nav-link" data-key="t-chat">
+                      <Link href="/admin/all-services" className="nav-link" data-key="t-chat">
                         All Menu
                       </Link>
                     </li>
