@@ -81,6 +81,11 @@ function Sidebar() {
                         All Menu
                       </a>
                     </li>
+                    <li className="nav-item">
+                      <a href="/admin/all-contents" className="nav-link" data-key="t-chat">
+                        All Contents
+                      </a>
+                    </li>
                   </ul>
                 </div>
               </li>

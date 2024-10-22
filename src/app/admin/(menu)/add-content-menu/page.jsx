@@ -91,13 +91,13 @@ export default function Page() {
             <div className="row">
               <div className="col-12">
                 <div className="page-title-box d-sm-flex align-items-center justify-content-between">
-                  <h4 className="mb-sm-0">Add Menu</h4>
+                  <h4 className="mb-sm-0">Add Menu Content</h4>
                   <div className="page-title-right">
                     <ol className="breadcrumb m-0">
                       <li className="breadcrumb-item">
                         <a href="#">Menu</a>
                       </li>
-                      <li className="breadcrumb-item active">Add Menu</li>
+                      <li className="breadcrumb-item active">Add Menu Content</li>
                     </ol>
                   </div>
                 </div>
@@ -181,7 +181,7 @@ export default function Page() {
                             </div>
                             {/* Slider Image Input */}
                             <div className="col-xxl-6 col-md-6">
-                              <label className="form-label">Slider Image</label>
+                              <label className="form-label">Service Image</label>
                               <input
                                 className="form-control"
                                 type="file"
@@ -214,7 +214,7 @@ export default function Page() {
                             {/* Multiple Image Upload */}
                             <div className="col-xxl-12 col-md-12">
                               <label className="form-label">
-                                Service Images (Multiple)
+                                Slider Images (Multiple)
                               </label>
                               <input
                                 className="form-control"
