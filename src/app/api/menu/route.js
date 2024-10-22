@@ -12,6 +12,8 @@ export async function GET() {
     );
   }
 }
+
+
 export async function POST(req) {
   try {
     const { menuName, menuUrl, parentMenuId } = await req.json();
