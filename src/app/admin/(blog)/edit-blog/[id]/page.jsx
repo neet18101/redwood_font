@@ -1,14 +1,14 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import RootLayout from '@/app/admin/layout';
 import AdminHeader from '@/app/admin/components_admin/AdminHeader';
 import Sidebar from '@/app/admin/components_admin/Sidebar';
 
 function Page({ params }) {
     const { id } = params;  // Extract the blog ID from URL parameters
-    console.log('edit-blog-id',id);
+    console.log('edit-blog-id', id);
     const [blogCategory, setBlogCategory] = useState([]);
     const [blogTitle, setBlogTitle] = useState('');
     const [blogSlug, setBlogSlug] = useState('');
@@ -36,27 +36,29 @@ function Page({ params }) {
     }, []);
 
     // Fetch existing blog data for editing
-    useEffect(() => {
-        const fetchBlogData = async () => {
-            try {
-                console.log('edit-blog-id',id);
-                const response = await fetch(`/api/update-blog/${id}`);
-                const data = await response.json();
-                if (response.ok) {
-                    setBlogTitle(data.title);
-                    setBlogSlug(data.slug);
-                    setBlogContent(data.content);
-                    setSelectedCategory(data.categoryId);
-                    // Set the image preview if an image URL is available
-                    setImagePreview(data.blog_image); // Assuming you have this field
-                } else {
-                    setErrorMessage(data.message);
-                }
-            } catch (error) {
-                console.error('Error fetching blog data:', error);
-                setErrorMessage('Failed to load blog data.');
+    const fetchBlogData = async () => {
+        try {
+            console.log('edit-blog-id', id);
+            const response = await fetch(`/api/update-blog/${id}`);
+            const data = await response.json();
+            if (response.ok) {
+                setBlogTitle(data.title);
+                setBlogSlug(data.slug);
+                setBlogContent(data.content);
+                setSelectedCategory(data.categoryId);
+                // Set the image preview if an image URL is available
+                setImagePreview(data.blog_image); // Assuming you have this field
+
+            } else {
+                setErrorMessage(data.message);
             }
-        };
+        } catch (error) {
+            console.error('Error fetching blog data:', error);
+            setErrorMessage('Failed to load blog data.');
+        }
+    };
+    useEffect(() => {
+
         fetchBlogData();
     }, [id]);
 
@@ -115,12 +117,13 @@ function Page({ params }) {
 
         try {
             setLoading(true);
-            const response = await fetch(`/api/update-blog-by-id/${id}`, {
-                method: 'PUT',
+            const response = await fetch(`/api/update-blog/${id}`, {
+                method: 'PATCH',
                 body: formData,
             });
             if (response.ok) {
-                toast.success('Blog post updated successfully.');
+                toast.success('Blog post loaded successfully');
+                fetchBlogData();
                 // window.location.reload();
 
             } else {
@@ -135,10 +138,24 @@ function Page({ params }) {
             setLoading(false);
         }
     };
+    // delete the blog 
+
+    const deleteHandle = async (blogId) => {
+        const response = await fetch(`/api/delete-blog?id=${blogId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id: blogId }),
+
+        })
+    }
+
 
     return (
         <RootLayout>
             <AdminHeader />
+            <Toaster />
             <Sidebar />
             <div className="main-content">
                 <div className="page-content">

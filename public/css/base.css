@@ -497,8 +497,8 @@ INDEX:
 }
  .site-header .site-branding img {
      max-width: 100%;
-     height: auto;
-     max-height: 30px;
+     /* height: auto; */
+    height: 90px;
 	 display: inline-block;
      -webkit-transition: all 300ms ease;
      transition: all 300ms ease;

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import Blog from "@/app/models/Blogs";
 import sequelize from "../../../../../utils/sequelize";
+import toast from "react-hot-toast";
 sequelize.sync();
 export async function GET(req, { params }) {
   const { id } = params;
@@ -18,34 +19,56 @@ export async function GET(req, { params }) {
     return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }
-export async function PATCH(req) {
-  // Parse the request URL to get query parameters
-  const { searchParams } = new URL(req.url);
-  const id = searchParams.get("id"); // Get the 'id' query parameter
+export async function PATCH(request, { params }) {
+  const { id } = params;
 
-  console.log("ID received from query parameters:", id); // Log the received ID for debugging
+  try {
+    // Parse the form data
+    const formData = await request.formData();
 
-  return new Promise((resolve, reject) => {
-    const dataToUpdate = {
-      is_active: 2,
-      ...req.body,
-    };
+    const title = formData.get("title");
+    const slug = formData.get("slug");
+    const categoryId = formData.get("categoryId");
+    const content = formData.get("content");
+    const blogImage = formData.get("blog_image");
+    if (!title || !slug || !content) {
+      return NextResponse.json(
+        { message: "Please provide all required fields." },
+        { status: 400 }
+      );
+    }
 
-    Blog.update(dataToUpdate, {
-      where: { id },
-    })
-      .then(([affectedCount]) => {
-        console.log("Affected rows count:", affectedCount);
-        if (affectedCount === 0) {
-          return reject(
-            NextResponse.json({ message: "Blog not found" }, { status: 404 })
-          );
-        }
-        resolve(NextResponse.json({ message: "Blog updated successfully" }));
-      })
-      .catch((error) => {
-        console.error("Error updating blog:", error);
-        reject(NextResponse.json({ message: "Server error" }, { status: 500 }));
-      });
-  });
+    const blog = await Blog.findByPk(id);
+    if (!blog) {
+      return NextResponse.json(
+        { message: "Blog post not found." },
+        { status: 404 }
+      );
+    }
+    blog.title = title;
+    blog.slug = slug;
+    blog.categoryId = categoryId;
+    blog.content = content;
+    if (blogImage) {
+      const imagePath = `/uploads/${blogImage.name}`;
+
+      // blog.imageUrl = imagePath; // Assuming 'imageUrl' is a field in your Blog model
+    }
+
+    // Save the updated blog
+    await blog.save();
+
+    return NextResponse.json(
+      { message: "Blog post updated successfully." },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error updating blog post:", error);
+    return NextResponse.json(
+      { message: "An error occurred while updating the blog post." },
+      { status: 500 }
+    );
+  }
 }
+
+

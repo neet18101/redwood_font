@@ -129,12 +129,12 @@ function Page() {
                                 </td>
                                 <td>
                                   <div className="hstack gap-3 flex-wrap">
-                                    {/* <a
-                                      href={`/admin/edit-blog/${listItem.id}`}
+                                    <a
+                                      href={`/admin/edit-menu-content/${listItem.id}`}
                                       className="link-success fs-15"
                                     >
                                       <i className="ri-edit-2-line"></i>
-                                    </a> */}
+                                    </a>
                                     <a
                                       href="javascript:void(0);"
                                       onClick={() => deleteHandle(listItem.id)}

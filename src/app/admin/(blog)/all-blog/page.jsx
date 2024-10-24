@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import RootLayout from '../../layout';
 import AdminHeader from '../../components_admin/AdminHeader';
 import Sidebar from '../../components_admin/Sidebar';
+import toast, { Toaster } from 'react-hot-toast';
 
 function Page() {
   const [blogs, setBlogs] = useState([]);
@@ -11,6 +12,15 @@ function Page() {
   const [successMessage, setSuccessMessage] = useState('');
 
   // Form Submission Handler
+  const fetchData = async () => {
+    try {
+      const res = await fetch(`/api/all-blog`);
+      const result = await res.json();
+      setBlogs(result);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
   const deleteHandle = async (blogId) => {
     setErrorMessage('');
     setSuccessMessage('');
@@ -23,7 +33,7 @@ function Page() {
     try {
       setLoading(true);
       const response = await fetch(`/api/delete-blog?id=${blogId}`, {
-        method: 'PATCH',
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -31,9 +41,8 @@ function Page() {
       });
 
       if (response.ok) {
-        // Remove the deleted blog from the UI
-        setBlogs(blogs.filter((blog) => blog.id !== blogId));
-        setSuccessMessage('Blog post deleted successfully.');
+        toast.success('Blog post deleted successfully.');
+        fetchData();
       } else {
         const errorData = await response.json();
         setErrorMessage(errorData.message || 'Failed to delete blog post.');
@@ -47,15 +56,7 @@ function Page() {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch(`/api/all-blog`);
-        const result = await res.json();
-        setBlogs(result);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+
     fetchData();
   }, []);
 
@@ -63,6 +64,7 @@ function Page() {
   return (
     <RootLayout>
       <AdminHeader />
+      <Toaster />
       <Sidebar />
 
       <div className="main-content">
