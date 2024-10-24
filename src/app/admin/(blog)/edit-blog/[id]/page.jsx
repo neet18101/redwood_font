@@ -8,6 +8,7 @@ import Sidebar from '@/app/admin/components_admin/Sidebar';
 
 function Page({ params }) {
     const { id } = params;  // Extract the blog ID from URL parameters
+    console.log('edit-blog-id',id);
     const [blogCategory, setBlogCategory] = useState([]);
     const [blogTitle, setBlogTitle] = useState('');
     const [blogSlug, setBlogSlug] = useState('');
@@ -38,6 +39,7 @@ function Page({ params }) {
     useEffect(() => {
         const fetchBlogData = async () => {
             try {
+                console.log('edit-blog-id',id);
                 const response = await fetch(`/api/update-blog/${id}`);
                 const data = await response.json();
                 if (response.ok) {

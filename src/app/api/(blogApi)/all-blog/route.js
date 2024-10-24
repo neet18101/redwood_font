@@ -14,8 +14,15 @@ export async function GET() {
       order: [['createdAt', 'DESC']], // Optional: Order by created date, most recent first
     });
 
+    // Map through the results and set a dummy image if blog_image is empty
+    const blogsList = activeBlogs.map(item => ({
+      ...item.toJSON(), // Convert Sequelize instance to plain object
+      blog_image: item.blog_image || '/images/blog/blog-01b.jpg', // Dummy image URL
+      display_updated_date: formatDate(item.updatedAt) // Format updatedAt
+    }));
+
     // Return the active blogs as a JSON response
-    return NextResponse.json(activeBlogs, { status: 200 });
+    return NextResponse.json(blogsList, { status: 200 });
   } catch (error) {
     console.error('Error fetching blogs:', error);
     return NextResponse.json(
@@ -24,3 +31,12 @@ export async function GET() {
     );
   }
 }
+
+
+
+// Function to format date
+const formatDate = (dateString) => {
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  return new Date(dateString).toLocaleDateString('en-US', options);
+};
+

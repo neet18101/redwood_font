@@ -21,7 +21,7 @@
                 password,
                 // callbackUrl: "/admin/dashboard"  // Redirect to this URL on successful login
             });
-            console.log(signInesult, "neetx");
+            console.log(signInesult, "res");
             if (signInesult?.ok) {
                 router.push("/admin/dashboard");
             } else {

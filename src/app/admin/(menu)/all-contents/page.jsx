@@ -5,57 +5,59 @@ import AdminHeader from '../../components_admin/AdminHeader';
 import Sidebar from '../../components_admin/Sidebar';
 
 function Page() {
-  const [blogs, setBlogs] = useState([]);
+  const [listData, setListData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/contents-api`);
+      const result = await res.json();
+      setListData(result);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setLoading(false);
+    }
+  };
+
   // Form Submission Handler
-  const deleteHandle = async (blogId) => {
+  const deleteHandle = async (itemId) => {
     setErrorMessage('');
     setSuccessMessage('');
 
-    if (!blogId) {
+    if (!itemId) {
       setErrorMessage('Something went wrong. Please try again later!');
       return;
     }
 
     try {
-      setLoading(true);
-      const response = await fetch(`/api/delete-blog?id=${blogId}`, {
-        method: 'PATCH',
+      const response = await fetch(`/api/contents-api?id=${itemId}`, {
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id: blogId }),
+        body: JSON.stringify({ id: itemId }),
       });
 
       if (response.ok) {
         // Remove the deleted blog from the UI
-        setBlogs(blogs.filter((blog) => blog.id !== blogId));
-        setSuccessMessage('Blog post deleted successfully.');
+        setListData(listData.filter((item) => item.id !== itemId));
+        setSuccessMessage('Service content deleted successfully.');
       } else {
         const errorData = await response.json();
-        setErrorMessage(errorData.message || 'Failed to delete blog post.');
+        setErrorMessage(errorData.message || 'Failed to delete service content.');
       }
     } catch (error) {
-      console.error('Error deleting blog:', error);
+      console.error('Error deleting service content:', error);
       setErrorMessage('Something went wrong. Please try again later.');
     } finally {
-      setLoading(false);
     }
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch(`/api/all-blog`);
-        const result = await res.json();
-        setBlogs(result);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
     fetchData();
   }, []);
 
@@ -104,38 +106,38 @@ function Page() {
                           </tr>
                         </thead>
                         <tbody>
-                          {blogs.length > 0 ? (
-                            blogs.map((blog, index) => (
-                              <tr key={blog.id}>
+                          {!loading && listData.length > 0 && (
+                            listData.map((listItem, index) => (
+                              <tr key={listItem.id}>
                                 <td className="fw-medium">{index + 1}</td>
-                                <td>{blog.title}</td>
+                                <td>{listItem.title}</td>
                                 <td>
                                   <img
-                                    src={blog.blog_image || '/default_image.jpg'}
-                                    alt={blog.title}
+                                    src={listItem.service_wallpaper || '/default_image.jpg'}
+                                    alt={listItem.title}
                                     width="50"
                                     height="50"
                                     style={{ borderRadius: '50px' }}
                                   />
                                 </td>
-                                <td dangerouslySetInnerHTML={{ __html: blog.content.substring(0, 100) + (blog.content.length > 100 ? '...' : '') }}></td>
+                                <td dangerouslySetInnerHTML={{ __html: listItem.content.substring(0, 100) + (listItem.content.length > 100 ? '...' : '') }}></td>
 
                                 <td>
-                                  <span className={`badge ${blog.is_active == 1 ? 'bg-success' : 'bg-danger'}`}>
-                                    {blog.is_active == 1 ? 'Active' : 'Inactive'}
+                                  <span className={`badge ${listItem.is_active == 1 ? 'bg-success' : 'bg-danger'}`}>
+                                    {listItem.is_active == 1 ? 'Active' : 'Inactive'}
                                   </span>
                                 </td>
                                 <td>
                                   <div className="hstack gap-3 flex-wrap">
-                                    <a
-                                      href={`/admin/edit-blog/${blog.id}`}
+                                    {/* <a
+                                      href={`/admin/edit-blog/${listItem.id}`}
                                       className="link-success fs-15"
                                     >
                                       <i className="ri-edit-2-line"></i>
-                                    </a>
+                                    </a> */}
                                     <a
                                       href="javascript:void(0);"
-                                      onClick={() => deleteHandle(blog.id)}
+                                      onClick={() => deleteHandle(listItem.id)}
                                       className="link-danger fs-15"
                                     >
                                       <i className="ri-delete-bin-line"></i>
@@ -144,10 +146,11 @@ function Page() {
                                 </td>
                               </tr>
                             ))
-                          ) : (
+                          )}
+                          {listData?.length == 0 && (
                             <tr>
                               <td colSpan="6" className="text-center">
-                                No content available.
+                                {loading ? 'Loading...' : 'No content available.'}
                               </td>
                             </tr>
                           )}

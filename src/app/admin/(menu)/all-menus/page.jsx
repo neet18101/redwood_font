@@ -154,14 +154,28 @@ function page() {
                                 <td>{item.parent_name ? item.parent_name : item.name}</td>
                                 <td>{item.parent_name ? item.name : 'N/A'}</td>
                                 <td>{item.formattedDate}</td>
+
                                 <td>
                                   {item.parent_id && (
-                                    <>
-                                      <span className="badge bg-success">Edit</span>&nbsp;&nbsp;
-                                      <span className="badge bg-success" onClick={() => { deleteHandle(item.id) }}>Delete</span>
-                                    </>
+                                    <div className="hstack gap-3 flex-wrap">
+                                      {/* <a
+                                        href={`/admin/edit-blog/${item.id}`}
+                                        className="link-success fs-15"
+                                      >
+                                        <i className="ri-edit-2-line"></i>
+                                      </a> */}
+                                      <a
+                                        href="javascript:void(0);"
+                                        onClick={() => deleteHandle(item.id)}
+                                        className="link-danger fs-15"
+                                      >
+                                        <i className="ri-delete-bin-line"></i>
+                                      </a>
+                                    </div>
                                   )}
                                 </td>
+
+
                               </tr>
                             ))}
                           </tbody>
