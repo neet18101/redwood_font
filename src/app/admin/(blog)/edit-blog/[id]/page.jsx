@@ -7,20 +7,18 @@ import AdminHeader from '@/app/admin/components_admin/AdminHeader';
 import Sidebar from '@/app/admin/components_admin/Sidebar';
 
 function Page({ params }) {
-    const { id } = params;  // Extract the blog ID from URL parameters
-    console.log('edit-blog-id', id);
+    const { id } = params;
     const [blogCategory, setBlogCategory] = useState([]);
     const [blogTitle, setBlogTitle] = useState('');
     const [blogSlug, setBlogSlug] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
     const [blogContent, setBlogContent] = useState('');
     const [blogImage, setBlogImage] = useState(null);
-    const [imagePreview, setImagePreview] = useState(null); // State for image preview
+    const [imagePreview, setImagePreview] = useState(null);
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
-    // Fetch blog categories from API
     useEffect(() => {
         const fetchBlogCategory = async () => {
             try {
@@ -72,7 +70,6 @@ function Page({ params }) {
             .replace(/--+/g, '-');
     };
 
-    // Handle title change and auto-generate slug
     const handleTitleChange = (e) => {
         const title = e.target.value;
         setBlogTitle(title);
@@ -83,8 +80,8 @@ function Page({ params }) {
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            setBlogImage(file); // Set selected image file
-            setImagePreview(URL.createObjectURL(file)); // Create a preview URL
+            setBlogImage(file);
+            setImagePreview(URL.createObjectURL(file));
         }
     };
 
